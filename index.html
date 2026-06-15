@@ -1,460 +1,523 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>你愿意和我约会吗？👉👈</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <title>I have a question for you... 👉👈</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
+        /* Creamy Pastel Pop Aesthetic */
         :root {
-            --primary-color: #ff4d6d;
-            --primary-hover: #ff758f;
-            --bg-gradient-1: #ffe5ec;
-            --bg-gradient-2: #ffcad4;
-            --text-color: #4a4a4a;
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --bg-gradient: linear-gradient(135deg, #fff5eb 0%, #ffe3e8 100%);
+            --panel-bg: #fffdf9;
+            --primary-pink: #ff8b94;
+            --hover-pink: #ff6b7b;
+            --border-color: #ffccd5;
+            --shadow-color: #ffb3ba;
+            --text-dark: #4a4a4a;
+            --text-muted: #888888;
+            --btn-gray: #e0e0e0;
+            --btn-gray-shadow: #c5c5c5;
         }
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+            margin: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: var(--text-color);
-            overflow-x: hidden;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 480px;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 2.5rem 2rem;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.6);
+            background: var(--bg-gradient);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
             position: relative;
         }
 
-        /* 步骤面板核心切换样式 */
+        /* Sweet Floating Background Elements */
+        .heart-pop {
+            position: absolute;
+            color: rgba(255, 139, 148, 0.35);
+            font-size: 24px;
+            animation: floatUp 4.5s linear infinite;
+            z-index: 1;
+            user-select: none;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* Big App-Style Container occupying 80% screen beautifully */
+        .container {
+            width: 90%;
+            max-width: 680px;
+            height: 85vh;
+            max-height: 750px;
+            min-height: 540px;
+            background: var(--panel-bg);
+            border: 5px solid var(--border-color);
+            border-radius: 40px;
+            box-shadow: 0 16px 0 var(--shadow-color);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        form {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Smooth Screen Slide/Fade Animation */
         .step-panel {
             display: none;
+            height: 100%;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             text-align: center;
-            gap: 1.5rem;
-            width: 100%;
         }
-
         .step-panel.active {
             display: flex;
-            animation: fadeIn 0.4s ease-in-out forwards;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Content Elements */
+        .gif-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+            max-height: 240px;
+            margin-bottom: 15px;
+        }
+        .gif-container img {
+            max-height: 100%;
+            max-width: 220px;
+            border-radius: 25px;
+            object-fit: contain;
         }
 
         h1 {
-            font-size: 1.6rem;
-            color: #ff143b;
-            line-height: 1.4;
-            margin-bottom: 0.5rem;
-            word-break: break-all;
+            font-family: 'Fredoka', sans-serif;
+            color: #ff5e7e;
+            font-size: 28px;
+            margin: 10px 0;
+            line-height: 1.3;
         }
+        @media(max-height: 600px) { h1 { font-size: 22px; } }
 
         p {
-            font-size: 0.95rem;
-            color: #666;
-            line-height: 1.5;
+            color: var(--text-dark);
+            font-size: 17px;
+            font-weight: 700;
+            margin: 0 0 20px 0;
         }
 
-        .gif-container {
-            width: 100%;
-            max-width: 180px;
-            height: 180px;
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .gif-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        /* Chunky Neo-Pop Input fields */
+        input[type="date"], input[type="time"], input[type="text"] {
+            width: 85%;
+            max-width: 320px;
+            padding: 15px;
+            border: 3px solid var(--border-color);
             border-radius: 20px;
-        }
-
-        /* 按钮通用样式 */
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1.2rem;
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        button {
-            border: none;
-            outline: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.25s ease;
-            cursor: pointer;
-        }
-
-        .btn-yes {
-            background: var(--primary-color);
-            color: white;
-            padding: 0.8rem 2.2rem;
-            border-radius: 50px;
-            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.3);
-            flex: 1;
-            max-width: 160px;
-        }
-
-        .btn-yes:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.4);
-        }
-
-        .btn-no {
-            background: #a2a2a2;
-            color: white;
-            padding: 0.8rem 2.2rem;
-            border-radius: 50px;
-            flex: 1;
-            max-width: 160px;
-            z-index: 9999; /* 确保乱飞时不被其他元素遮挡 */
-        }
-
-        .btn-back {
-            background: transparent;
-            color: #999;
-            border: 1px solid #ddd;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-        }
-
-        .btn-back:hover {
-            background: rgba(0,0,0,0.03);
-            color: #666;
-        }
-
-        /* 表单输入框区域 */
-        .input-group {
-            width: 100%;
-            text-align: left;
-            margin-top: 0.5rem;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #888;
-            margin-bottom: 0.5rem;
-            padding-left: 0.5rem;
-        }
-
-        .styled-input {
-            width: 100%;
-            padding: 0.9rem 1.2rem;
-            border: 2px solid #ffe5ec;
-            border-radius: 16px;
-            font-size: 1rem;
-            color: var(--text-color);
-            background: white;
-            outline: none;
-            transition: all 0.3s ease;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 18px;
+            color: var(--text-dark);
             text-align: center;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 6px 0 var(--shadow-color);
+            transition: all 0.1s ease;
+            margin-bottom: 25px;
+        }
+        input:focus {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 var(--shadow-color);
+            border-color: var(--primary-pink);
         }
 
-        .styled-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 10px rgba(255, 77, 109, 0.1);
-        }
-
-        /* 标签多选网格结构 */
-        .choices-grid {
+        /* Grid Selection Layout as seen in Reference Images */
+        .grid-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
+            gap: 16px;
             width: 100%;
-            margin: 0.5rem 0;
+            max-width: 500px;
+            margin-bottom: 20px;
+            flex: 1;
+            align-content: center;
         }
 
-        .btn-choice {
-            background: white;
-            border: 2px solid #ffe5ec;
-            padding: 0.8rem 1rem;
-            border-radius: 18px;
-            color: var(--text-color);
-            font-size: 0.9rem;
+        /* 3D Jelly Option Cards */
+        .option-card {
+            background: #fff;
+            border: 3px solid var(--border-color);
+            border-radius: 22px;
+            padding: 15px;
+            cursor: pointer;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 0.4rem;
+            gap: 6px;
+            font-weight: 700;
+            color: var(--text-dark);
+            box-shadow: 0 6px 0 var(--shadow-color);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s;
+            user-select: none;
+        }
+        .option-card .icon { font-size: 34px; }
+        .option-card span:not(.icon) { font-size: 16px; }
+
+        .option-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 var(--shadow-color);
+        }
+        .option-card input[type="checkbox"] { display: none; }
+
+        /* Selected State */
+        .option-card.selected {
+            background-color: #fff0f2;
+            border-color: var(--primary-pink);
+            box-shadow: 0 4px 0 var(--primary-pink);
+            transform: translateY(2px);
         }
 
-        .btn-choice:hover {
-            background: #fff0f3;
-            border-color: #ffcad4;
+        .custom-input-box {
+            display: none;
+            width: 100%;
+            animation: popIn 0.3s ease;
         }
 
-        .btn-choice.selected {
-            background: var(--primary-color);
+        /* Bottom Dual-Navigation Group (Back & Next) */
+        .nav-group {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            min-height: 80px;
+        }
+
+        /* Jelly/Bouncy Cartoon Buttons */
+        button, input[type="submit"] {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
+        }
+
+        .btn-yes, .btn-next, input[type="submit"] {
+            background: var(--primary-pink);
             color: white;
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.25);
+            padding: 14px 40px;
+            box-shadow: 0 6px 0 #e06d76;
+        }
+        .btn-yes:hover, .btn-next:hover, input[type="submit"]:hover {
+            background: var(--hover-pink);
         }
 
-        textarea.styled-input {
-            resize: none;
-            height: 90px;
-            text-align: left;
+        .btn-back, .btn-no {
+            background: var(--btn-gray);
+            color: var(--text-dark);
+            padding: 14px 30px;
+            box-shadow: 0 6px 0 var(--btn-gray-shadow);
+        }
+        .btn-back:hover { background: #d5d5d5; }
+
+        /* Button Press Active Simulation */
+        button:active, input[type="submit"]:active, .btn-yes:active {
+            transform: translateY(4px) !important;
+            box-shadow: 0 2px 0 cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        }
+
+        /* Step 1 Clean Flex Row Layout to prevent collision overlay */
+        .step1-btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            width: 100%;
+            height: 120px;
+            position: relative;
+        }
+        .step1-btn-container button {
+            position: relative;
+            transition: transform 0.1s ease;
         }
     </style>
 </head>
 <body>
 
+    <div id="hearts-bg"></div>
+
     <div class="container">
-        <form action="https://api.web3forms.com/submit" method="POST" id="quizForm" onsubmit="return prepareSubmission()">
-            <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-            <input type="hidden" name="subject" value="💖 哇！你收到了一份完美的约会答卷！">
-            <input type="hidden" name="from_name" value="约会邀请小助手">
-            
-            <input type="hidden" name="选择的日期" id="hiddenDate">
-            <input type="hidden" name="选择的时间" id="hiddenTime">
-            <input type="hidden" name="想吃的美食" id="hiddenFood">
-            <input type="hidden" name="想玩的活动" id="hiddenActivities">
+        <form id="dateForm" action="https://api.web3forms.com/submit" method="POST" onsubmit="prepareSubmission()">
+
+            <input type="hidden" name="access_key" value="03f4f2be-0c57-4ca6-a5bf-8faac5c09645">
+            <input type="hidden" name="subject" value="New Romantic Date Response! ❤️">
+            <input type="hidden" id="hidden-food" name="Selected_Food" value="">
+            <input type="hidden" id="hidden-activities" name="Selected_Activities" value="">
+            <input type="hidden" name="from_name" value="Romantic Date Planner">
 
             <div id="step-1" class="step-panel active">
                 <div class="gif-container">
-                    <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW9scXF6Y290cmZ6bnRpaWh5NXp3MXFpZnd6bms3YW92Y2Rnd29pbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/c4r6mUCOphS6f8pSlK/giphy.gif" alt="Bubu Dudu">
+                    <img id="main-gif" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="Bubu Dudu Cute">
                 </div>
-                <h1>这周末，你愿意和我一起去约会吗？ 👉👈</h1>
-                <p>偷偷告诉你，这门考试不允许挂科，请谨慎选择~</p>
-                <div class="btn-container">
-                    <button type="button" class="btn-yes" id="yesBtn" onclick="nextStep(1, 2)">愿意！</button>
-                    <button type="button" class="btn-no" id="noBtn" onmouseover="dodge()" onclick="dodge()" ontouchstart="dodge()">不愿意</button>
+                <h1 id="question-text">Would you like to go on a date with me this weekend? 👉👈</h1>
+                <div class="step1-btn-container" id="btn-container">
+                    <button type="button" class="btn-yes" id="yesBtn" onclick="nextStep(1, 2)">Yes!</button>
+                    <button type="button" class="btn-no" id="noBtn" onmouseover="dodge()" onclick="dodge()">No</button>
                 </div>
             </div>
 
             <div id="step-2" class="step-panel">
                 <div class="gif-container">
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTFwY2g0Z3lsM295dHFlZms1cWZ2eWp3ZndndXp2N3Z5b3B6dzFwMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/mS80vV9IdbE9LAn26Z/giphy.gif" alt="Pick date">
+                    <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
                 </div>
-                <h1>太棒了！哪天最完美？ 📅</h1>
-                
-                <div class="input-group">
-                    <label>选择心动日期</label>
-                    <input type="text" id="dateInput" class="styled-input" placeholder="点击挑选日期 🌸" readonly>
-                </div>
-
-                <div class="input-group">
-                    <label>选择最佳时间</label>
-                    <input type="text" id="timeInput" class="styled-input" placeholder="点击选择时间 ⏰" readonly>
-                </div>
-
-                <div class="btn-container">
-                    <button type="button" class="btn-back" onclick="nextStep(2, 1)">返回</button>
-                    <button type="button" class="btn-yes" onclick="nextStep(2, 3)">下一步</button>
+                <h1>Pick a Date 📅</h1>
+                <p>Which day works best for you?</p>
+                <input type="date" name="Date">
+                <div class="nav-group">
+                    <button type="button" class="btn-back" onclick="prevStep(2, 1)">Back</button>
+                    <button type="button" class="btn-next" onclick="nextStep(2, 3)">Next ➡️</button>
                 </div>
             </div>
 
             <div id="step-3" class="step-panel">
                 <div class="gif-container">
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWRuM3p5M3AwZ3g4dHhkamg0MTNma295N3p3czY5ZXp0czUzdmNpayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y8SdfGbygRkd8wz47F/giphy.gif" alt="Food">
+                    <img src="https://media.giphy.com/media/l4FGpP4lxGGgK5CBW/giphy.gif">
                 </div>
-                <h1>肚子饿了！想吃点什么呢？ 🍕</h1>
-                <p>（支持多选哦，只要你喜欢我都带你去）</p>
-                
-                <div class="choices-grid">
-                    <button type="button" class="btn-choice" onclick="toggleFood(this, '浪漫西餐 🥩')">浪漫西餐 🥩</button>
-                    <button type="button" class="btn-choice" onclick="toggleFood(this, '热辣火锅 🍲')">热辣火锅 🍲</button>
-                    <button type="button" class="btn-choice" onclick="toggleFood(this, '精致日料 🍣')">精致日料 🍣</button>
-                    <button type="button" class="btn-choice" onclick="toggleFood(this, '甜品奶茶 🍰')">甜品奶茶 🍰</button>
-                    <button type="button" class="btn-choice" onclick="toggleFood(this, '路边小吃 🍢')">路边小吃 🍢</button>
-                    <button type="button" class="btn-choice" onclick="toggleFood(this, '由我盲盒决定 🎁')">秘密盲盒 🎁</button>
-                </div>
-
-                <div class="btn-container">
-                    <button type="button" class="btn-back" onclick="nextStep(3, 2)">返回</button>
-                    <button type="button" class="btn-yes" onclick="nextStep(3, 4)">下一步</button>
+                <h1>Pick a Time ⏰</h1>
+                <p>Scroll to choose the perfect time:</p>
+                <input type="time" name="Time">
+                <div class="nav-group">
+                    <button type="button" class="btn-back" onclick="prevStep(3, 2)">Back</button>
+                    <button type="button" class="btn-next" onclick="nextStep(3, 4)">Next ➡️</button>
                 </div>
             </div>
 
             <div id="step-4" class="step-panel">
-                <div class="gif-container">
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWZ2ajhoN3A0eXU2cDZ0Njd6NXh0ZHFpNXo5NWZ4dWhtZGs3bzFsbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VwVp6u89mX9vH5Wp5z/giphy.gif" alt="Activity">
+                <h1>What shall we eat? 🍔</h1>
+                <p>Select your favorites (Multiple Choices):</p>
+                <div class="grid-options">
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Burgers">
+                        <span class="icon">🍔</span><span>Burgers</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Chinese Food">
+                        <span class="icon">🥢</span><span>Chinese Food</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Dessert">
+                        <span class="icon">🍰</span><span>Dessert</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Pizza">
+                        <span class="icon">🍕</span><span>Pizza</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Sushi">
+                        <span class="icon">🍣</span><span>Sushi</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this); toggleCustomInput('food-custom', this)">
+                        <input type="checkbox" data-group="food" value="Custom">
+                        <span class="icon">✨</span><span>Other...</span>
+                    </label>
                 </div>
-                <h1>接下来的节目是什么？ 🎬</h1>
-                <p>（同样可以多选，把一天安排得满满当当）</p>
-                
-                <div class="choices-grid">
-                    <button type="button" class="btn-choice" onclick="toggleActivity(this, '看场电影 🍿')">看场电影 🍿</button>
-                    <button type="button" class="btn-choice" onclick="toggleActivity(this, '散步聊天 🗺️')">散步聊天 🗺️</button>
-                    <button type="button" class="btn-choice" onclick="toggleActivity(this, '游乐园 🎡')">游乐园 🎡</button>
-                    <button type="button" class="btn-choice" onclick="toggleActivity(this, '逛街抓娃娃 🧸')">逛街抓娃娃 🧸</button>
-                    <button type="button" class="btn-choice" onclick="toggleActivity(this, '去拍照打卡 📷')">拍照打卡 📷</button>
-                    <button type="button" class="btn-choice" onclick="toggleActivity(this, '等见到了再说 🤫')">到时候再说 🤫</button>
+                <div id="food-custom" class="custom-input-box">
+                    <input type="text" name="Custom_Food_Input" placeholder="Type your craving here...">
                 </div>
-
-                <div class="btn-container">
-                    <button type="button" class="btn-back" onclick="nextStep(4, 3)">返回</button>
-                    <button type="button" class="btn-yes" onclick="nextStep(4, 5)">下一步</button>
+                <div class="nav-group">
+                    <button type="button" class="btn-back" onclick="prevStep(4, 3)">Back</button>
+                    <button type="button" class="btn-next" onclick="nextStep(4, 5)">Next ➡️</button>
                 </div>
             </div>
 
             <div id="step-5" class="step-panel">
-                <div class="gif-container">
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW51bTZoYms1Y2NxNms5eHloMWNsbG55cWkycmM3Ymd1N3phdW00MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L33yUI7HcoZitA3N2C/giphy.gif" alt="Love">
+                <h1>What are we doing? 🎬</h1>
+                <p>Choose our activities (Multiple Choices):</p>
+                <div class="grid-options">
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Movies">
+                        <span class="icon">🎬</span><span>Movies</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Theme Park">
+                        <span class="icon">🎡</span><span>Theme Park</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Beach">
+                        <span class="icon">🚶</span><span>Walk</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Gaming">
+                        <span class="icon">🎮</span><span>Gaming</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Outdoor Sports">
+                        <span class="icon">🚴</span><span>Outdoor Sports</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this); toggleCustomInput('activity-custom', this)">
+                        <input type="checkbox" data-group="activity" value="Custom">
+                        <span class="icon">✨</span><span>Other...</span>
+                    </label>
                 </div>
-                <h1>最后一项啦！💌</h1>
-                <p>有什么想对我说的话，或者额外的期待吗？</p>
-                
-                <div class="input-group">
-                    <textarea name="留言备忘录" class="styled-input" placeholder="例如：我想喝那家新开的奶茶！或者写下你的心情... (选填)"></textarea>
+                <div id="activity-custom" class="custom-input-box">
+                    <input type="text" name="Custom_Activity_Input" placeholder="What do you have in mind?">
                 </div>
-
-                <div class="btn-container">
-                    <button type="button" class="btn-back" onclick="nextStep(5, 4)">返回</button>
-                    <button type="submit" class="btn-yes" style="background: #ff143b;">发送给 TA ✨</button>
+                <div class="nav-group">
+                    <button type="button" class="btn-back" onclick="prevStep(5, 4)">Back</button>
+                    <button type="button" class="btn-next" onclick="nextStep(5, 6)">Next ➡️</button>
                 </div>
             </div>
+
+            <div id="step-6" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif">
+                </div>
+                <h1>All Set! 🥰</h1>
+                <p>Can't wait! Please leave your name to confirm:</p>
+                <input type="text" name="Your_Name" id="nameInput" placeholder="Your name or nickname" required>
+                <div class="nav-group">
+                    <button type="button" class="btn-back" onclick="prevStep(6, 5)">Back</button>
+                    <input type="submit" value="Send to Me 💌">
+                </div>
+            </div>
+
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
     <script>
-        // ==========================================
-        // 核心 JavaScript 逻辑 —— 全部完全置于全局作用域
-        // ==========================================
-        
-        let selectedFood = [];
-        let selectedActivities = [];
+let yesScale = 1;
+let noCount = 0;
 
-        // 1. 绝对安全的面板切换逻辑
-        function nextStep(current, next) {
-            // 第二步的前进验证
-            if (current === 2 && next > current) {
-                const dateVal = document.getElementById('dateInput').value;
-                const timeVal = document.getElementById('timeInput').value;
-                if (!dateVal || !timeVal) {
-                    alert("请先选好心动的日期和时间哦！❤️");
-                    return;
-                }
-            }
-            // 第三步的前进验证
-            if (current === 3 && next > current) {
-                if (selectedFood.length === 0) {
-                    alert("多少选一个嘛，不挑食的孩子有糖吃！🍕");
-                    return;
-                }
-            }
-            // 第四步的前进验证
-            if (current === 4 && next > current) {
-                if (selectedActivities.length === 0) {
-                    alert("选一个想玩的嘛，你想去哪我都陪你！✨");
-                    return;
-                }
-            }
+// Floating hearts
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart-pop';
+    heart.innerHTML = '❤️';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (Math.random() * 2 + 3.5) + 's';
+    heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+    document.getElementById('hearts-bg').appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+}
+setInterval(createHeart, 350);
 
-            // 顺利切面板
-            document.getElementById(`step-${current}`).classList.remove('active');
-            document.getElementById(`step-${next}`).classList.add('active');
-        }
+// Step switching
+function showStep(step) {
+    document.querySelectorAll('.step-panel').forEach(panel => {
+        panel.classList.remove('active');
+    });
+    const target = document.getElementById('step-' + step);
+    if (target) {
+        target.classList.add('active');
+    }
+}
 
-        // 2. 无懈可击的视口级全屏飞跃算法（彻底根治 No 按钮不动的Bug）
-        function dodge() {
-            const noBtn = document.getElementById('noBtn');
-            
-            // 瞬间切换到屏幕 fixed 定位，彻底打破原容器边界束缚
-            if (noBtn.style.position !== 'fixed') {
-                noBtn.style.position = 'fixed';
-            }
-            
-            // 安全预留内边距，防止按钮飞出屏幕外面看不到
-            const padding = 25;
-            const btnWidth = noBtn.offsetWidth || 140;
-            const btnHeight = noBtn.offsetHeight || 45;
+function nextStep(current, next) {
+    const currentPanel = document.getElementById('step-' + current);
 
-            // 全视口大小动态追踪计算
-            const maxX = window.innerWidth - btnWidth - padding;
-            const maxY = window.innerHeight - btnHeight - padding;
+    // Validate required fields before moving forward
+    const required = currentPanel.querySelector('[required]');
+    if (required && !required.value.trim()) {
+        required.focus();
+        return;
+    }
 
-            // 在安全区间内，生成全屏幕的绝对随机落点
-            const randomX = Math.max(padding, Math.random() * maxX);
-            const randomY = Math.max(padding, Math.random() * maxY);
+    showStep(next);
+}
 
-            // 强制渲染位置
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
-        }
+function prevStep(current, previous) {
+    showStep(previous);
+}
 
-        // 3. 食物多选标签处理
-        function toggleFood(element, value) {
-            element.classList.toggle('selected');
-            if (selectedFood.includes(value)) {
-                selectedFood = selectedFood.filter(item => item !== value);
-            } else {
-                selectedFood.push(value);
-            }
-        }
+// No button dodge + Yes grows
+function dodge() {
+    const noBtn = document.getElementById('noBtn');
+    const container = document.getElementById('btn-container');
 
-        // 4. 活动多选标签处理
-        function toggleActivity(element, value) {
-            element.classList.toggle('selected');
-            if (selectedActivities.includes(value)) {
-                selectedActivities = selectedActivities.filter(item => item !== value);
-            } else {
-                selectedActivities.push(value);
-            }
-        }
+    noCount++;
 
-        // 5. 提交前将数组组装打包进隐蔽字段
-        function prepareSubmission() {
-            document.getElementById('hiddenDate').value = document.getElementById('dateInput').value;
-            document.getElementById('hiddenTime').value = document.getElementById('timeInput').value;
-            document.getElementById('hiddenFood').value = selectedFood.join(', ');
-            document.getElementById('hiddenActivities').value = selectedActivities.join(', ');
-            return true; 
-        }
+    const maxX = container.clientWidth / 2 - noBtn.offsetWidth;
+    const maxY = container.clientHeight / 2 - noBtn.offsetHeight;
 
-        // 6. 第三方时间插件初始化（页面加载时自动执行）
-        document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#dateInput", {
-                locale: "zh",
-                dateFormat: "Y年m月d日 (l)",
-                minDate: "today",
-                disableMobile: "true"
-            });
+    noBtn.style.position = 'absolute';
+    noBtn.style.transform =
+        `translate(${(Math.random() * maxX * 2 - maxX)}px, ${(Math.random() * maxY * 2 - maxY)}px)`;
 
-            flatpickr("#timeInput", {
-                locale: "zh",
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true,
-                disableMobile: "true"
-            });
-        });
-    </script>
+    yesScale = Math.min(1 + noCount * 0.08, 1.6);
+    document.getElementById('yesBtn').style.transform = `scale(${yesScale})`;
+}
+
+// Option cards
+function toggleCard(card) {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    card.classList.toggle('selected', checkbox.checked);
+}
+
+function toggleCustomInput(id, card) {
+    const box = document.getElementById(id);
+    const checkbox = card.querySelector('input');
+
+    if (checkbox.checked) {
+        box.style.display = 'block';
+    } else {
+        box.style.display = 'none';
+    }
+}
+
+// Prepare submitted values
+function prepareSubmission() {
+    const food = [];
+    document.querySelectorAll('input[data-group="food"]:checked').forEach(i => food.push(i.value));
+
+    const activity = [];
+    document.querySelectorAll('input[data-group="activity"]:checked').forEach(i => activity.push(i.value));
+
+    const foodCustom = document.querySelector('[name="Custom_Food_Input"]').value.trim();
+    const activityCustom = document.querySelector('[name="Custom_Activity_Input"]').value.trim();
+
+    if (foodCustom) food.push(foodCustom);
+    if (activityCustom) activity.push(activityCustom);
+
+    document.getElementById('hidden-food').value = food.join(', ');
+    document.getElementById('hidden-activities').value = activity.join(', ');
+}
+
+// Prevent accidental form submit on buttons
+document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', e => e.preventDefault());
+});
+</script>
 </body>
 </html>
