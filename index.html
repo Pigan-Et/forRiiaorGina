@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我有件事情想问你... 👉👈</title>
+    <style>
+        /* 全局可爱粉色浪漫风格 */
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffeaa7 0%, #ffb8b8 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 飘落的心形背景效果 */
+        .heart {
+            position: absolute;
+            color: rgba(255, 107, 107, 0.4);
+            font-size: 20px;
+            animation: float 4s linear infinite;
+            z-index: 1;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            max-width: 420px;
+            width: 85%;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .gif-container img {
+            width: 180px;
+            height: 180px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #d63031;
+            font-size: 26px;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            height: 120px;
+            position: relative;
+        }
+
+        button, input[type="submit"] {
+            padding: 14px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-yes {
+            background-color: #ff7675;
+            color: white;
+            z-index: 100;
+        }
+        .btn-yes:hover { transform: scale(1.05); background-color: #e84393; }
+
+        .btn-no {
+            background-color: #b2bec3;
+            color: white;
+            position: absolute;
+            right: 50px;
+            z-index: 99;
+        }
+
+        /* 收集邮箱表单 */
+        .form-panel { display: none; }
+        .form-panel input[type="text"] {
+            width: 85%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ffb8b8;
+            border-radius: 25px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+        }
+        .form-panel input[type="text"]:focus { border-color: #ff7675; }
+    </style>
+</head>
+<body>
+
+    <div id="hearts-bg"></div>
+
+    <div class="container">
+        <div id="stage-interactive">
+            <div class="gif-container">
+                <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3B0ZndvdnE1bW91b3R0NXN3MWhwMnN4Y295cHZ4bndpOHR6dHlsayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/9f2meEi1uzqdC0sia0/giphy.gif" alt="Bubu Dudu">
+            </div>
+            <h1 id="question-text">请问……这周末可以和你一起约会吗？(๑•́ ₃ •̀๑)</h1>
+            <div class="btn-group" id="btn-container">
+                <button class="btn-yes" id="yesBtn" onclick="onAgree()">好呀！</button>
+                <button class="btn-no" id="noBtn" onmouseover="dodge()" onclick="dodge()">不要</button>
+            </div>
+        </div>
+
+        <div id="stage-form" class="form-panel">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW00Ym9icXp3b3ZzYnd4ZnN0YTF3czhjcDJwazg2N3p2MXVvMnM0eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y8S98G0Q8B0yCAlF9S/giphy.gif" alt="Happy Dance">
+            </div>
+            <h1 style="color: #e84393;">耶！那太好了！(❁´◡`❁)</h1>
+            <p style="color: #636e72; margin-bottom: 20px;">留下你的名字和微信，我们商量去哪玩~</p>
+            
+            <form action="https://formspree.io/f/你的Formspree表单ID" method="POST">
+                <input type="text" name="神秘嘉宾姓名" placeholder="你的名字/昵称" required>
+                <input type="text" name="联系微信" placeholder="你的微信号/手机号" required>
+                <input type="hidden" name="答复结果" value="我愿意去约会！">
+                <br>
+                <input type="submit" class="btn-yes" value="发送给TA 💌">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let yesScale = 1;
+        let noCount = 0;
+
+        // 1. 自动生成漂落的心形背景
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            document.getElementById('hearts-bg').appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 400);
+
+        // 2. “不要”按钮躲开的交互逻辑
+        function dodge() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const container = document.getElementById('btn-container');
+            
+            // 限制躲避范围在按钮容器内
+            const maxX = container.clientWidth - noBtn.clientWidth;
+            const maxY = container.clientHeight - noBtn.clientHeight;
+            
+            const randomX = Math.random() * maxX;
+            // 限制垂直活动范围，防止跑出卡片
+            const randomY = (Math.random() - 0.5) * 60; 
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // 核心功能：每次拒绝，“好呀”按钮就会变大
+            yesScale += 0.15;
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            // 随着拒绝次数增加，文案变得更有趣
+            noCount++;
+            const qText = document.getElementById('question-text');
+            const mainGif = document.getElementById('main-gif');
+            
+            if (noCount === 2) {
+                qText.innerText = "工资上交！家务我包！考虑一下嘛 🥺";
+                mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDJ0cmN0MnM0NXEyeXFvOHY4Z3N3bnd3OHBwZ3Z0ZHp0bndpOHR6dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/39vDJgZ7fWfSVP8b9W/giphy.gif";
+            } else if (noCount === 4) {
+                qText.innerText = "我会做超级好吃的饭哦！真的不去吗？😭";
+            } else if (noCount >= 6) {
+                qText.innerText = "不管！你只能点那个大大的按钮了！哼 😤";
+                noBtn.style.display = 'none'; // 拒绝太多次后，按钮直接消失，强制同意
+            }
+        }
+
+        // 3. 点击“好呀！”切换到表单阶段
+        function onAgree() {
+            document.getElementById('stage-interactive').style.display = 'none';
+            document.getElementById('stage-form').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
