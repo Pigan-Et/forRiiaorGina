@@ -114,3 +114,297 @@
             outline: none;
             margin-bottom: 20px;
             background: white;
+            box-sizing: border-box;
+        }
+        input:focus { border-color: #ff7675; }
+
+        .custom-input-box {
+            display: none;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            height: 100px;
+            position: relative;
+        }
+
+        button, input[type="submit"] {
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-yes { background-color: #ff7675; color: white; z-index: 100; }
+        .btn-yes:hover { background-color: #e84393; }
+        .btn-no { background-color: #b2bec3; color: white; position: absolute; right: 50px; z-index: 99; }
+        .btn-next { background-color: #ff7675; color: white; width: 80%; }
+        .btn-next:hover { background-color: #e84393; }
+    </style>
+</head>
+<body>
+
+    <div id="hearts-bg"></div>
+
+    <div class="container">
+        <form id="dateForm" action="https://api.web3forms.com/submit" method="POST" onsubmit="prepareSubmission()">
+
+            <input type="hidden" name="access_key" value="03f4f2be-0c57-4ca6-a5bf-8faac5c09645">
+            <input type="hidden" name="subject" value="New Romantic Date Response! ❤️">
+            
+            <input type="hidden" id="hidden-food" name="Selected_Food" value="">
+            <input type="hidden" id="hidden-activities" name="Selected_Activities" value="">
+            
+            <input type="hidden" name="from_name" value="Romantic Date Planner">
+
+            <div id="step-1" class="step-panel active">
+                <div class="gif-container">
+                    <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3B0ZndvdnE1bW91b3R0NXN3MWhwMnN4Y295cHZ4bndpOHR6dHlsayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/9f2meEi1uzqdC0sia0/giphy.gif" alt="Bubu Dudu">
+                </div>
+                <h1 id="question-text">Would you like to go on a date with me this weekend? (๑•́ ₃ •̀๑)</h1>
+                <div class="btn-group" id="btn-container">
+                    <button type="button" class="btn-yes" id="yesBtn" onclick="nextStep(1, 2)">Yes!</button>
+                    <button type="button" class="btn-no" id="noBtn" onmouseover="dodge()" onclick="dodge()">No</button>
+                </div>
+            </div>
+
+            <div id="step-2" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTZ6YW10YmdwZ3A1M3RndXNnaW9wN3dwNDB3M3N0NDZndXNoeTdsMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L40aR3S8xscwO7wB80/giphy.gif">
+                </div>
+                <h1>Pick a Date 📅</h1>
+                <p>Which day works best for you?</p>
+                <input type="date" name="Date" required>
+                <br>
+                <button type="button" class="btn-next" onclick="nextStep(2, 3)">Next Step ➡️</button>
+            </div>
+
+            <div id="step-3" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHc3MDRwbDJ3YWNhbmlmMnBrbTBpMWY1NzN4eXBocWZ0NXFkaDZ6dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3orif4rfMvOAd5G8S4/giphy.gif">
+                </div>
+                <h1>Pick a Time ⏰</h1>
+                <p>Scroll to choose the perfect time:</p>
+                <input type="time" name="Time" required>
+                <br>
+                <button type="button" class="btn-next" onclick="nextStep(3, 4)">Next Step ➡️</button>
+            </div>
+
+            <div id="step-4" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXN6OWV3N2w5YWoxOGo2czdrdzkwOTdmdzh4OXJyeWRjZHhiZ3p5ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/vE9ZBlS44O13A_1B74/giphy.gif">
+                </div>
+                <h1>What shall we eat? 🍔</h1>
+                <p>Select your favorite food (Multiple choices):</p>
+                <div class="grid-options">
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Burgers">
+                        <span class="icon">🍔</span><span>Burgers</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Chinese Food">
+                        <span class="icon">🥢</span><span>Chinese</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Dessert">
+                        <span class="icon">🍰</span><span>Dessert</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Pizza">
+                        <span class="icon">🍕</span><span>Pizza</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="food" value="Sushi">
+                        <span class="icon">🍣</span><span>Sushi</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this); toggleCustomInput('food-custom', this)">
+                        <input type="checkbox" data-group="food" value="Custom">
+                        <span class="icon">✨</span><span>Other...</span>
+                    </label>
+                </div>
+                <div id="food-custom" class="custom-input-box">
+                    <input type="text" name="Custom_Food_Input" placeholder="Tell me what you want to eat...">
+                </div>
+                <button type="button" class="btn-next" onclick="nextStep(4, 5)">Next Step ➡️</button>
+            </div>
+
+            <div id="step-5" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW00Ym9icXp3b3ZzYnd4ZnN0YTF3czhjcDJwazg2N3p2MXVvMnM0eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y8S98G0Q8B0yCAlF9S/giphy.gif">
+                </div>
+                <h1>What are we doing? 🎬</h1>
+                <p>Choose our activities (Multiple choices):</p>
+                <div class="grid-options">
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Movies">
+                        <span class="icon">🎬</span><span>Movies</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Theme Park">
+                        <span class="icon">🎡</span><span>Theme Park</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Beach">
+                        <span class="icon">🏖️</span><span>Beach Walk</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Gaming">
+                        <span class="icon">🎮</span><span>Gaming</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="18+ Only">
+                        <span class="icon">🔞</span><span>18+ Only</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this); toggleCustomInput('activity-custom', this)">
+                        <input type="checkbox" data-group="activity" value="Custom">
+                        <span class="icon">✨</span><span>Other...</span>
+                    </label>
+                </div>
+                <div id="activity-custom" class="custom-input-box">
+                    <input type="text" name="Custom_Activity_Input" placeholder="What else do you have in mind?...">
+                </div>
+                <button type="button" class="btn-next" onclick="nextStep(5, 6)">Next Step ➡️</button>
+            </div>
+
+            <div id="step-6" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDJ0cmN0MnM0NXEyeXFvOHY4Z3N3bnd3OHBwZ3Z0ZHp0bndpOHR6dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/33OrjzUFwSmME/giphy.gif">
+                </div>
+                <h1 style="color: #e84393;">All Set! 🥰</h1>
+                <p>Can't wait to see you! Please leave your name to confirm our date:</p>
+                <input type="text" name="Your_Name" placeholder="Enter your name/nickname" required>
+                <br>
+                <input type="submit" class="btn-yes" style="width: 80%;" value="Send to Me 💌">
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        let yesScale = 1;
+        let noCount = 0;
+
+        // 1. Floating Hearts Animation
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            document.getElementById('hearts-bg').appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 400);
+
+        // 2. Step Navigation
+        function nextStep(current, next) {
+            const currentPanel = document.getElementById(`step-${current}`);
+            const inputs = currentPanel.querySelectorAll('input[required]');
+            let valid = true;
+            inputs.forEach(input => {
+                if(!input.value) valid = false;
+            });
+
+            if(!valid) {
+                alert("Please fill in or select an option before moving on! ❤️");
+                return;
+            }
+
+            document.getElementById(`step-${current}`).classList.remove('active');
+            document.getElementById(`step-${next}`).classList.add('active');
+        }
+
+        // 3. Card Selection Toggle Effect
+        function toggleCard(card) {
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            setTimeout(() => {
+                if(checkbox.checked) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            }, 50);
+        }
+
+        // 4. Toggle Custom Input Box for "Other..."
+        function toggleCustomInput(id, card) {
+            const box = document.getElementById(id);
+            const input = box.querySelector('input');
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            setTimeout(() => {
+                if(checkbox.checked) {
+                    box.style.display = 'block';
+                    input.required = true;
+                } else {
+                    box.style.display = 'none';
+                    input.required = false;
+                    input.value = '';
+                }
+            }, 60);
+        }
+
+        // 5. 将多选项打包组合到隐藏输入框中供 Web3Forms 完美读取
+        function prepareSubmission() {
+            // 打包食物
+            const foodCards = document.querySelectorAll('input[data-group="food"]:checked');
+            let foods = [];
+            foodCards.forEach(card => {
+                if(card.value !== 'Custom') foods.push(card.value);
+            });
+            document.getElementById('hidden-food').value = foods.join(', ');
+
+            // 打包活动
+            const activityCards = document.querySelectorAll('input[data-group="activity"]:checked');
+            let activities = [];
+            activityCards.forEach(card => {
+                if(card.value !== 'Custom') activities.push(card.value);
+            });
+            document.getElementById('hidden-activities').value = activities.join(', ');
+        }
+
+        // 6. Dodge/Escape Animation for "No" button
+        function dodge() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const container = document.getElementById('btn-container');
+            
+            const maxX = container.clientWidth - noBtn.clientWidth;
+            const randomX = Math.random() * maxX;
+            const randomY = (Math.random() - 0.5) * 60; 
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            yesScale += 0.25;
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            noCount++;
+            const qText = document.getElementById('question-text');
+            const mainGif = document.getElementById('main-gif');
+            
+            if (noCount === 2) {
+                qText.innerText = "I'll cook your favorite food! Think about it again 🥺";
+                mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDJ0cmN0MnM0NXEyeXFvOHY4Z3N3bnd3OHBwZ3Z0ZHp0bndpOHR6dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/39vDJgZ7fWfSVP8b9W/giphy.gif";
+            } else if (noCount === 4) {
+                qText.innerText = "Pretty please? It's going to be so much fun! 😭";
+            } else if (noCount >= 6) {
+                qText.innerText = "Fine! You can only click the giant YES button now! 哼 😤";
+                noBtn.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
