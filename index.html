@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我有件事情想问你... 👉👈</title>
+    <title>I have a question for you... 👉👈</title>
     <style>
-        /* 全局可爱粉色浪漫风格 */
+        /* Base Romantic Styles */
         body {
             margin: 0;
             height: 100vh;
@@ -18,7 +18,7 @@
             position: relative;
         }
 
-        /* 飘落的心形背景效果 */
+        /* Floating Hearts Background */
         .heart {
             position: absolute;
             color: rgba(255, 107, 107, 0.4);
@@ -33,42 +33,110 @@
 
         .container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px;
             border-radius: 30px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            max-width: 420px;
+            max-width: 450px;
             width: 85%;
             z-index: 10;
             backdrop-filter: blur(5px);
+            box-sizing: border-box;
         }
 
         .gif-container img {
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
             border-radius: 15px;
             object-fit: cover;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         h1 {
             color: #d63031;
-            font-size: 26px;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            font-size: 24px;
+            margin-bottom: 20px;
         }
 
+        p {
+            color: #636e72;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Form & Grid Styles */
+        .step-panel { display: none; }
+        .step-panel.active { display: block; }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* Interactive Cards */
+        .option-card {
+            background: white;
+            border: 2px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+        .option-card .icon { font-size: 30px; }
+        .option-card:hover { transform: translateY(-3px); border-color: #ff7675; }
+        
+        /* Hidden Checkboxes but styled cards */
+        .option-card input[type="checkbox"], .option-card input[type="radio"] {
+            display: none;
+        }
+        .option-card.selected {
+            background-color: #ff7675;
+            color: white;
+            border-color: #d63031;
+        }
+
+        /* Inputs */
+        input[type="date"], input[type="time"], input[type="text"] {
+            width: 90%;
+            padding: 12px;
+            border: 2px solid #ffb8b8;
+            border-radius: 25px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 20px;
+            background: white;
+        }
+        input:focus { border-color: #ff7675; }
+
+        .custom-input-box {
+            display: none;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Buttons */
         .btn-group {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 25px;
-            height: 120px;
+            height: 100px;
             position: relative;
         }
 
         button, input[type="submit"] {
-            padding: 14px 30px;
+            padding: 12px 30px;
             font-size: 18px;
             border: none;
             border-radius: 50px;
@@ -78,34 +146,11 @@
             box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
 
-        .btn-yes {
-            background-color: #ff7675;
-            color: white;
-            z-index: 100;
-        }
-        .btn-yes:hover { transform: scale(1.05); background-color: #e84393; }
-
-        .btn-no {
-            background-color: #b2bec3;
-            color: white;
-            position: absolute;
-            right: 50px;
-            z-index: 99;
-        }
-
-        /* 收集邮箱表单 */
-        .form-panel { display: none; }
-        .form-panel input[type="text"] {
-            width: 85%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 2px solid #ffb8b8;
-            border-radius: 25px;
-            font-size: 16px;
-            text-align: center;
-            outline: none;
-        }
-        .form-panel input[type="text"]:focus { border-color: #ff7675; }
+        .btn-yes { background-color: #ff7675; color: white; z-index: 100; }
+        .btn-yes:hover { background-color: #e84393; }
+        .btn-no { background-color: #b2bec3; color: white; position: absolute; right: 50px; z-index: 99; }
+        .btn-next { background-color: #ff7675; color: white; width: 80%; }
+        .btn-next:hover { background-color: #e84393; }
     </style>
 </head>
 <body>
@@ -113,39 +158,136 @@
     <div id="hearts-bg"></div>
 
     <div class="container">
-        <div id="stage-interactive">
-            <div class="gif-container">
-                <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3B0ZndvdnE1bW91b3R0NXN3MWhwMnN4Y295cHZ4bndpOHR6dHlsayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/9f2meEi1uzqdC0sia0/giphy.gif" alt="Bubu Dudu">
-            </div>
-            <h1 id="question-text">请问……这周末可以和你一起约会吗？(๑•́ ₃ •̀๑)</h1>
-            <div class="btn-group" id="btn-container">
-                <button class="btn-yes" id="yesBtn" onclick="onAgree()">好呀！</button>
-                <button class="btn-no" id="noBtn" onmouseover="dodge()" onclick="dodge()">不要</button>
-            </div>
-        </div>
+        <form id="dateForm" action="https://formspree.io/f/你的Formspree表单ID" method="POST">
 
-        <div id="stage-form" class="form-panel">
-            <div class="gif-container">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW00Ym9icXp3b3ZzYnd4ZnN0YTF3czhjcDJwazg2N3p2MXVvMnM0eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y8S98G0Q8B0yCAlF9S/giphy.gif" alt="Happy Dance">
+            <div id="step-1" class="step-panel active">
+                <div class="gif-container">
+                    <img id="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3B0ZndvdnE1bW91b3R0NXN3MWhwMnN4Y295cHZ4bndpOHR6dHlsayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/9f2meEi1uzqdC0sia0/giphy.gif" alt="Bubu Dudu">
+                </div>
+                <h1 id="question-text">Would you like to go on a date with me this weekend? (๑•́ ₃ •̀๑)</h1>
+                <div class="btn-group" id="btn-container">
+                    <button type="button" class="btn-yes" id="yesBtn" onclick="nextStep(1, 2)">Yes!</button>
+                    <button type="button" class="btn-no" id="noBtn" onmouseover="dodge()" onclick="dodge()">No</button>
+                </div>
             </div>
-            <h1 style="color: #e84393;">耶！那太好了！(❁´◡`❁)</h1>
-            <p style="color: #636e72; margin-bottom: 20px;">留下你的名字和微信，我们商量去哪玩~</p>
-            
-            <form action="https://formspree.io/f/你的Formspree表单ID" method="POST">
-                <input type="text" name="神秘嘉宾姓名" placeholder="你的名字/昵称" required>
-                <input type="text" name="联系微信" placeholder="你的微信号/手机号" required>
-                <input type="hidden" name="答复结果" value="我愿意去约会！">
+
+            <div id="step-2" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTZ6YW10YmdwZ3A1M3RndXNnaW9wN3dwNDB3M3N0NDZndXNoeTdsMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L40aR3S8xscwO7wB80/giphy.gif">
+                </div>
+                <h1>Pick a Date 📅</h1>
+                <p>Which day works best for you?</p>
+                <input type="date" name="Date" required>
                 <br>
-                <input type="submit" class="btn-yes" value="发送给TA 💌">
-            </form>
-        </div>
+                <button type="button" class="btn-next" onclick="nextStep(2, 3)">Next Step ➡️</button>
+            </div>
+
+            <div id="step-3" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHc3MDRwbDJ3YWNhbmlmMnBrbTBpMWY1NzN4eXBocWZ0NXFkaDZ6dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3orif4rfMvOAd5G8S4/giphy.gif">
+                </div>
+                <h1>Pick a Time ⏰</h1>
+                <p>Scroll to choose the perfect time:</p>
+                <input type="time" name="Time" required>
+                <br>
+                <button type="button" class="btn-next" onclick="nextStep(3, 4)">Next Step ➡️</button>
+            </div>
+
+            <div id="step-4" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXN6OWV3N2w5YWoxOGo2czdrdzkwOTdmdzh4OXJyeWRjZHhiZ3p5ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/vE9ZBlS44O13A_1B74/giphy.gif">
+                </div>
+                <h1>What shall we eat? 🍔</h1>
+                <p>Select your favorite food (Multiple choices):</p>
+                <div class="grid-options">
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Food[]" value="Burgers">
+                        <span class="icon">🍔</span><span>Burgers</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Food[]" value="Chinese Food">
+                        <span class="icon">🥢</span><span>Chinese</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Food[]" value="Dessert">
+                        <span class="icon">🍰</span><span>Dessert</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Food[]" value="Pizza">
+                        <span class="icon">🍕</span><span>Pizza</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Food[]" value="Sushi">
+                        <span class="icon">🍣</span><span>Sushi</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this); toggleCustomInput('food-custom', this)">
+                        <input type="checkbox" name="Food[]" value="Custom">
+                        <span class="icon">✨</span><span>Other...</span>
+                    </label>
+                </div>
+                <div id="food-custom" class="custom-input-box">
+                    <input type="text" name="Custom_Food_Input" placeholder="Tell me what you want to eat...">
+                </div>
+                <button type="button" class="btn-next" onclick="nextStep(4, 5)">Next Step ➡️</button>
+            </div>
+
+            <div id="step-5" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW00Ym9icXp3b3ZzYnd4ZnN0YTF3czhjcDJwazg2N3p2MXVvMnM0eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Y8S98G0Q8B0yCAlF9S/giphy.gif">
+                </div>
+                <h1>What are we doing? 🎬</h1>
+                <p>Choose our activities (Multiple choices):</p>
+                <div class="grid-options">
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Activities[]" value="Movies">
+                        <span class="icon">🎬</span><span>Movies</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Activities[]" value="Theme Park">
+                        <span class="icon">🎡</span><span>Theme Park</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Activities[]" value="Beach">
+                        <span class="icon">🏖️</span><span>Beach Walk</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Activities[]" value="Gaming">
+                        <span class="icon">🎮</span><span>Gaming</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" name="Activities[]" value="18+ Only">
+                        <span class="icon">🔞</span><span>18+ Only</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this); toggleCustomInput('activity-custom', this)">
+                        <input type="checkbox" name="Activities[]" value="Custom">
+                        <span class="icon">✨</span><span>Other...</span>
+                    </label>
+                </div>
+                <div id="activity-custom" class="custom-input-box">
+                    <input type="text" name="Custom_Activity_Input" placeholder="What else do you have in mind?...">
+                </div>
+                <button type="button" class="btn-next" onclick="nextStep(5, 6)">Next Step ➡️</button>
+            </div>
+
+            <div id="step-6" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDJ0cmN0MnM0NXEyeXFvOHY4Z3N3bnd3OHBwZ3Z0ZHp0bndpOHR6dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/33OrjzUFwSmME/giphy.gif">
+                </div>
+                <h1 style="color: #e84393;">All Set! 🥰</h1>
+                <p>Can't wait to see you! Please leave your name to confirm our date:</p>
+                <input type="text" name="Your_Name" placeholder="Enter your name/nickname" required>
+                <br>
+                <input type="submit" class="btn-yes" style="width: 80%;" value="Send to Me 💌">
+            </div>
+
+        </form>
     </div>
 
     <script>
         let yesScale = 1;
         let noCount = 0;
 
-        // 1. 自动生成漂落的心形背景
+        // 1. Floating Hearts Animation
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -158,47 +300,84 @@
         }
         setInterval(createHeart, 400);
 
-        // 2. “不要”按钮躲开的交互逻辑
+        // 2. Step Navigation
+        function nextStep(current, next) {
+            // Simple validation before going next
+            const currentPanel = document.getElementById(`step-${current}`);
+            const inputs = currentPanel.querySelectorAll('input[required]');
+            let valid = true;
+            inputs.forEach(input => {
+                if(!input.value) valid = false;
+            });
+
+            if(!valid) {
+                alert("Please fill in or select an option before moving on! ❤️");
+                return;
+            }
+
+            document.getElementById(`step-${current}`).classList.remove('active');
+            document.getElementById(`step-${next}`).classList.add('active');
+        }
+
+        // 3. Card Selection Toggle Effect
+        function toggleCard(card) {
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            // Timeout to allow the native checkbox to update its state
+            setTimeout(() => {
+                if(checkbox.checked) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            }, 50);
+        }
+
+        // 4. Toggle Custom Input Box for "Other..."
+        function toggleCustomInput(id, card) {
+            const box = document.getElementById(id);
+            const input = box.querySelector('input');
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            setTimeout(() => {
+                if(checkbox.checked) {
+                    box.style.display = 'block';
+                    input.required = true;
+                } else {
+                    box.style.display = 'none';
+                    input.required = false;
+                    input.value = '';
+                }
+            }, 60);
+        }
+
+        // 5. Dodge/Escape Animation for "No" button
         function dodge() {
             const noBtn = document.getElementById('noBtn');
             const yesBtn = document.getElementById('yesBtn');
             const container = document.getElementById('btn-container');
             
-            // 限制躲避范围在按钮容器内
             const maxX = container.clientWidth - noBtn.clientWidth;
-            const maxY = container.clientHeight - noBtn.clientHeight;
-            
             const randomX = Math.random() * maxX;
-            // 限制垂直活动范围，防止跑出卡片
             const randomY = (Math.random() - 0.5) * 60; 
 
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
 
-            // 核心功能：每次拒绝，“好呀”按钮就会变大
-            yesScale += 0.15;
+            yesScale += 0.25;
             yesBtn.style.transform = `scale(${yesScale})`;
 
-            // 随着拒绝次数增加，文案变得更有趣
             noCount++;
             const qText = document.getElementById('question-text');
             const mainGif = document.getElementById('main-gif');
             
             if (noCount === 2) {
-                qText.innerText = "工资上交！家务我包！考虑一下嘛 🥺";
+                qText.innerText = "I'll cook your favorite food! Think about it again 🥺";
                 mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDJ0cmN0MnM0NXEyeXFvOHY4Z3N3bnd3OHBwZ3Z0ZHp0bndpOHR6dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/39vDJgZ7fWfSVP8b9W/giphy.gif";
             } else if (noCount === 4) {
-                qText.innerText = "我会做超级好吃的饭哦！真的不去吗？😭";
+                qText.innerText = "Pretty please? It's going to be so much fun! 😭";
             } else if (noCount >= 6) {
-                qText.innerText = "不管！你只能点那个大大的按钮了！哼 😤";
-                noBtn.style.display = 'none'; // 拒绝太多次后，按钮直接消失，强制同意
+                qText.innerText = "Fine! You can only click the giant YES button now! 哼 😤";
+                noBtn.style.display = 'none';
             }
-        }
-
-        // 3. 点击“好呀！”切换到表单阶段
-        function onAgree() {
-            document.getElementById('stage-interactive').style.display = 'none';
-            document.getElementById('stage-form').style.display = 'block';
         }
     </script>
 </body>
