@@ -257,23 +257,19 @@
             box-shadow: 0 2px 0 cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         }
 
-        /* Step 1 Unique Layout for Absolute Dodge Button */
+        /* Step 1 Clean Flex Row Layout to prevent collision overlay */
         .step1-btn-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 30px;
+            gap: 25px;
             width: 100%;
-            height: 90px;
+            height: 120px;
             position: relative;
         }
-        .btn-no {
-            position: absolute;
-            right: 20%;
-            z-index: 99;
-        }
-        .btn-yes {
-            z-index: 100;
+        .step1-btn-container button {
+            position: relative;
+            transition: transform 0.1s ease;
         }
     </style>
 </head>
@@ -307,7 +303,7 @@
                 </div>
                 <h1>Pick a Date 📅</h1>
                 <p>Which day works best for you?</p>
-                <input type="date" name="Date" required disabled>
+                <input type="date" name="Date">
                 <div class="nav-group">
                     <button type="button" class="btn-back" onclick="prevStep(2, 1)">Back</button>
                     <button type="button" class="btn-next" onclick="nextStep(2, 3)">Next ➡️</button>
@@ -320,7 +316,7 @@
                 </div>
                 <h1>Pick a Time ⏰</h1>
                 <p>Scroll to choose the perfect time:</p>
-                <input type="time" name="Time" required disabled>
+                <input type="time" name="Time">
                 <div class="nav-group">
                     <button type="button" class="btn-back" onclick="prevStep(3, 2)">Back</button>
                     <button type="button" class="btn-next" onclick="nextStep(3, 4)">Next ➡️</button>
@@ -352,4 +348,90 @@
                         <span class="icon">🍣</span><span>Sushi</span>
                     </label>
                     <label class="option-card" onclick="toggleCard(this); toggleCustomInput('food-custom', this)">
-                        <input type="checkbox"
+                        <input type="checkbox" data-group="food" value="Custom">
+                        <span class="icon">✨</span><span>Other...</span>
+                    </label>
+                </div>
+                <div id="food-custom" class="custom-input-box">
+                    <input type="text" name="Custom_Food_Input" placeholder="Type your craving here...">
+                </div>
+                <div class="nav-group">
+                    <button type="button" class="btn-back" onclick="prevStep(4, 3)">Back</button>
+                    <button type="button" class="btn-next" onclick="nextStep(4, 5)">Next ➡️</button>
+                </div>
+            </div>
+
+            <div id="step-5" class="step-panel">
+                <h1>What are we doing? 🎬</h1>
+                <p>Choose our activities (Multiple Choices):</p>
+                <div class="grid-options">
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Movies">
+                        <span class="icon">🎬</span><span>Movies</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Theme Park">
+                        <span class="icon">🎡</span><span>Theme Park</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Beach">
+                        <span class="icon">🏖️</span><span>Beach Walk</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="Gaming">
+                        <span class="icon">🎮</span><span>Gaming</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this)">
+                        <input type="checkbox" data-group="activity" value="18+ Only">
+                        <span class="icon">🔞</span><span>18+ Only</span>
+                    </label>
+                    <label class="option-card" onclick="toggleCard(this); toggleCustomInput('activity-custom', this)">
+                        <input type="checkbox" data-group="activity" value="Custom">
+                        <span class="icon">✨</span><span>Other...</span>
+                    </label>
+                </div>
+                <div id="activity-custom" class="custom-input-box">
+                    <input type="text" name="Custom_Activity_Input" placeholder="What do you have in mind?">
+                </div>
+                <div class="nav-group">
+                    <button type="button" class="btn-back" onclick="prevStep(5, 4)">Back</button>
+                    <button type="button" class="btn-next" onclick="nextStep(5, 6)">Next ➡️</button>
+                </div>
+            </div>
+
+            <div id="step-6" class="step-panel">
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDJ0cmN0MnM0NXEyeXFvOHY4Z3N3bnd3OHBwZ3Z0ZHp0bndpOHR6dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/33OrjzUFwSmME/giphy.gif">
+                </div>
+                <h1>All Set! 🥰</h1>
+                <p>Can't wait! Please leave your name to confirm:</p>
+                <input type="text" name="Your_Name" id="nameInput" placeholder="Your name or nickname" required>
+                <div class="nav-group">
+                    <button type="button" class="btn-back" onclick="prevStep(6, 5)">Back</button>
+                    <input type="submit" value="Send to Me 💌">
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        let yesScale = 1;
+        let noCount = 0;
+
+        // 1. Smooth Floating Soft Hearts Background
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-pop');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3.5 + 's';
+            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
+            document.getElementById('hearts-bg').appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 350);
+
+        // 2. Step Navigation (Forward) With Smart Custom JS Validation
+        function nextStep(current, next) {
+            // Pure JS
